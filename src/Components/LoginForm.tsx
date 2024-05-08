@@ -1,10 +1,9 @@
-import React, { useState ,useEffect} from "react";
+import { useState ,useEffect} from "react";
 import axios from "axios";
 import  BASE_URL  from "../Constants/Links"
 import {Link,useNavigate} from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 
 const LoginForm = () => {
@@ -47,8 +46,6 @@ const LoginForm = () => {
             console.error(error);
             return toast.error(error.response.data.message)
         }
-
-
     }
 
     return (
@@ -82,12 +79,9 @@ const LoginForm = () => {
                 </div>
             </div>
 
-
         </>
     )
 
 }
-
-
 
 export default LoginForm;

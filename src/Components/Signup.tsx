@@ -13,11 +13,9 @@ const Signup = () => {
     const [userName, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('')
 
-
     const inputTyping = (event) => {
         event.target.name == 'email' ? setEmail(event.target.value) :  event.target.name == 'userName'? setUsername(event.target.value) :setPassword(event.target.value)
     }
-
     const submitFunction = async (event) => {
         event.preventDefault();
         const trimmedEmail=email.trim();
@@ -33,33 +31,28 @@ const Signup = () => {
         if(trimmedUserName.length<4){
             return toast.error("UserName Length should be Min 4 Characters")
         }
-
         try {
-            const response=await axios.post(`${BASE_URL}/signup`,{
+            const response=await axios.post(`${BASE_URL}/signUp`,{
              email,password,userName
             })
-            // const token=response.data.token
-            // console.log(token); 
-            //  toast.success(response.data.message)
-            //  localStorage.setItem('token',token)
-            //  navigate('/Dashboard')
+             toast.success(response.data.message)
+             setTimeout(() => {
+                navigate('/')
+             }, 3000);
+           
         } catch (error) {
             console.error(error);
             return toast.error(error.response.data.message)
         }
-
-
     }
 
     return (
         <>
             <div className="flex  justify-center items-center h-screen ">
                 <div className=" sm:flex border-2 border-black shadow-gray-500 shadow-md ">
-
                     <div className="border items-center text-center sm:flex  border-black text-white bg-black">
                         <h1 className="font-serif text-3xl text-center p-5">TO DO APP</h1>
                     </div>
-
                     <div className="border p-11 gap-3 bg-gray-300 border-black ">
                         <form action="" method="post" onSubmit={submitFunction} >
                             <div className="flex justify-between py-3">
@@ -85,11 +78,8 @@ const Signup = () => {
                     <ToastContainer />
                 </div>
             </div>
-
-
         </>
     )
-
 }
 
 
