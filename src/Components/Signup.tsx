@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import { useState } from "react";
 import axios from "axios";
 import  BASE_URL  from "../Constants/Links"
 import {Link,useNavigate} from "react-router-dom";
@@ -7,25 +7,21 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 
-const LoginForm = () => {
+const Signup = () => {
     const navigate=useNavigate();
     const [email, setEmail] = useState<string>('');
+    const [userName, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('')
 
-    useEffect(() => {
-        const token=localStorage.getItem('token')
-        if(token){
-          navigate('/Dashboard');
-        }
-      },[])
 
     const inputTyping = (event) => {
-        event.target.name == 'email' ? setEmail(event.target.value) : setPassword(event.target.value)
+        event.target.name == 'email' ? setEmail(event.target.value) :  event.target.name == 'userName'? setUsername(event.target.value) :setPassword(event.target.value)
     }
 
     const submitFunction = async (event) => {
         event.preventDefault();
         const trimmedEmail=email.trim();
+        const trimmedUserName=userName.trim();
         const trimmedPassword=password.trim();
         const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!emailRegex.test(trimmedEmail)){
@@ -34,15 +30,19 @@ const LoginForm = () => {
         if(trimmedPassword.length<4){
             return toast.error("Password Length should be Min 4 Characters")
         }
+        if(trimmedUserName.length<4){
+            return toast.error("UserName Length should be Min 4 Characters")
+        }
+
         try {
-            const response=await axios.post(`${BASE_URL}/login`,{
-             email,password
+            const response=await axios.post(`${BASE_URL}/signup`,{
+             email,password,userName
             })
-            const token=response.data.token
-            console.log(token); 
-             toast.success(response.data.message)
-             localStorage.setItem('token',token)
-             navigate('/Dashboard')
+            // const token=response.data.token
+            // console.log(token); 
+            //  toast.success(response.data.message)
+            //  localStorage.setItem('token',token)
+            //  navigate('/Dashboard')
         } catch (error) {
             console.error(error);
             return toast.error(error.response.data.message)
@@ -66,15 +66,19 @@ const LoginForm = () => {
                                 <label htmlFor="email">Email</label>
                                 <input type="text" name="email" required id="email"  value={email} onChange={(e) => inputTyping(e)} className="px-2"/>
                             </div>
+                            <div className="flex justify-between py-3">
+                                <label htmlFor="email">User Name</label>
+                                <input type="text" name="userName" required id="userName"  value={userName} onChange={(e) => inputTyping(e)} className="px-2"/>
+                            </div>
                             <div className="flex justify-between">
                                 <label htmlFor="password">Password</label>
                                 <input type="password"   name="password" required id="password" value={password} onChange={(e) => inputTyping(e)} className="px-2" />
                             </div>
                             <div className="flex items-center justify-end py-3 ">
-                                <input className="px-3 text-white bg-black hover:bg-white hover:text-black py-1 rounded-sm  font-semibold" type="submit" value="Login" />
+                                <input className="px-3 text-white bg-black hover:bg-white hover:text-black py-1 rounded-sm  font-semibold" type="submit" value="Register" />
                             </div>
                             <div className="">
-                                Don't Have an account <span className=" font-semibold underline text-blue-700 ml-1 cursor-pointer"><Link to='/signup'>Register</Link>  </span>
+                               Back To <span className=" font-semibold underline text-blue-700 ml-1 cursor-pointer"><Link to='/'>Login</Link>  </span>
                             </div>
                         </form>
                     </div>
@@ -90,4 +94,4 @@ const LoginForm = () => {
 
 
 
-export default LoginForm;
+export default Signup;
