@@ -1,3 +1,8 @@
 input{
   border: 1px solid black;
+  padding-left: 10px;
+}
+
+label{
+  margin-right: 8px;
 }
