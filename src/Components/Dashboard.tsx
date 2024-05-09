@@ -55,6 +55,9 @@ const Dashboard = () => {
 
     const addTaskFunction = async () => {
         try {
+            if( !newCat || !newDate.trim() || !newTitle.trim() || !newDesc.trim()){
+                return  toast.error("All field should be filled")
+            }
             const response = await axios.post(`${BASE_URL}/addTask`, {
                 newCat, newDate, newTitle, newDesc
             })
@@ -94,6 +97,29 @@ const Dashboard = () => {
 
     }
 
+    const cancelEdit=()=>{
+        setEditTaskId("")
+    }
+
+    const update=async (taskId)=>{
+     console.log(editedTask);
+     if(!editedTask.category_id || !editedTask.title.trim() || !editedTask.description.trim() || !editedTask.due_date.trim() || !editedTask.completed ){
+      return  toast.error("All field should be filled")
+     }
+     try {
+       const response=await axios.post(`${BASE_URL}/updateTask`,{editedTask,taskId})
+        toast.success(response.data.message)
+     } catch (error) {
+        console.error(error);
+        toast.error("failed to update")
+     }
+     finally{
+        setEditedTask("")
+        setEditTaskId("")
+        dashboardGet()
+     }
+     
+    }
 
     return (
         <>
@@ -129,7 +155,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                     <h1 className="text-center font-semibold text-2xl p-2 pt-6">TASKS</h1>
-                    <div>
+                    <div className="flex justify-center">
                         <table className="">
                             <thead>
                                 <tr>
@@ -148,7 +174,7 @@ const Dashboard = () => {
                                         <td>{index + 1}</td>
                                         <td>
                                             {editTaskId == tasks.id ? (
-                                                <select className="border-black border" name="Category " id="Category" onChange={(e) => setEditedTask({ ...editedTask, category_id: e.target.value })}  >
+                                                <select className="" name="Category " id="Category" onChange={(e) => setEditedTask({ ...editedTask, category_id: e.target.value })}  >
                                                     {categories.map((data) => (
                                                         <option key={data.id} value={data.id}>{data.name}</option>
                                                     ))}
@@ -157,13 +183,13 @@ const Dashboard = () => {
                                         </td>
                                         <td>
                                             {editTaskId == tasks.id ? (
-                                                <input type="date" name="" id="" value={editedTask.due_date} onChange={(e) => setEditedTask({ ...editedTask, due_date: e.target.value })} />
-                                            ) : (tasks.due_date)}
+                                                <input className="border-transparent" type="date" required name="" id="" value={new Date(editedTask.due_date).toLocaleDateString('en-CA')} onChange={(e) => setEditedTask({ ...editedTask, due_date: e.target.value })} />
+                                            ) : (tasks.due_date.split("T")[0])}
                                         </td>
 
                                         <td>
                                             {editTaskId == tasks.id ? (
-                                                <input type="text" name="" id="" value={editedTask.title} onChange={(e) => setEditedTask({ ...editedTask, title: e.target.value })} />
+                                                <input  type="text" name="" id="" value={editedTask.title} onChange={(e) => setEditedTask({ ...editedTask, title: e.target.value })} />
                                             ) : (tasks.title)}
                                         </td>
                                         <td>
@@ -182,12 +208,12 @@ const Dashboard = () => {
                                         <td>
                                             {editTaskId == tasks.id ? (
                                                 <>
-                                                 <button>Cancel</button>
-                                                <button>Update</button>
+                                                 <button  onClick={cancelEdit} className="border">Cancel</button>
+                                                <button onClick={()=>update(tasks.id)} className="border">Update</button>
                                                 </>           
                                             ) : (
                                                 <>
-                                                <button onClick={() => editId(tasks)} className="border">EDIT</button>
+                                            <button onClick={() => editId(tasks)} className="border">EDIT</button>
                                             <button onClick={() => deleteTask(tasks.id)} className="border">Delete</button>
                                                 </>
                                             )}
