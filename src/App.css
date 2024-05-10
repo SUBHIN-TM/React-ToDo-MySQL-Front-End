@@ -12,3 +12,6 @@ table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
 }
+body{
+  background: linear-gradient(90deg,rgb(94, 101, 94),rgb(233, 223, 223));
+}

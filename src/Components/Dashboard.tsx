@@ -124,11 +124,11 @@ const Dashboard = () => {
     return (
         <>
             <div className="pt-6">
-                <div className="flex justify-between py-2 px-5 ">
-                    <h1>Hi <span>{userName}</span> </h1>
-                    <button className="border-2 p-1 border-black rounded-md" onClick={logout}>Logout</button>
+                <div className="flex justify-between py-2 px-5  ">
+                    <h1 className="text-2xl italic">Hi <span className="">{userName}</span> </h1>
+                    <button className="border-2 p-1 border-black rounded-md bg-black text-white font-semibold" onClick={logout}>Logout</button>
                 </div>
-                <div className=" flex justify-around  flex-wrap border py-6">
+                <div className=" flex justify-around  flex-wrap border-black border py-6 mt-3 pb-11">
                     <div className="mt-6">
                         <label className="mr-3" htmlFor="Category">Category</label>
                         <select className="border-black border" name="Category " id="Category" onChange={(e) => setnewCat(e.target.value)} defaultValue={1} >
@@ -150,11 +150,11 @@ const Dashboard = () => {
                         <input type="date" name="date" id="date" value={newDate} onChange={(e) => setnewDate(e.target.value)} />
                     </div>
                     <div className="mt-6">
-                        <button onClick={addTaskFunction} className="border-black border px-1 ">ADD TASK</button>
+                        <button onClick={addTaskFunction} className="border-black border px-1  bg-black text-white font-semibold rounded-md ">ADD TASK</button>
                     </div>
                 </div>
                 <div>
-                    <h1 className="text-center font-semibold text-2xl p-2 pt-6">TASKS</h1>
+                    <h1 className="text-center font-semibold text-2xl p-2 pt-6 pb-6">TASKS</h1>
                     <div className="flex justify-center">
                         <table className="">
                             <thead>
@@ -171,7 +171,7 @@ const Dashboard = () => {
                             <tbody>
                                 {tasks.map((tasks, index) => (
                                     <tr key={tasks.id}>
-                                        <td>{index + 1}</td>
+                                        <td >{index + 1}</td>
                                         <td>
                                             {editTaskId == tasks.id ? (
                                                 <select className="" name="Category " id="Category" onChange={(e) => setEditedTask({ ...editedTask, category_id: e.target.value })}  >
@@ -208,13 +208,13 @@ const Dashboard = () => {
                                         <td>
                                             {editTaskId == tasks.id ? (
                                                 <>
-                                                 <button  onClick={cancelEdit} className="border">Cancel</button>
-                                                <button onClick={()=>update(tasks.id)} className="border">Update</button>
+                                                 <button  onClick={cancelEdit} className="border rounded-md bg-black text-white p-1">Cancel</button>
+                                                <button onClick={()=>update(tasks.id)} className="border rounded-md bg-black text-white p-1">Update</button>
                                                 </>           
                                             ) : (
                                                 <>
-                                            <button onClick={() => editId(tasks)} className="border">EDIT</button>
-                                            <button onClick={() => deleteTask(tasks.id)} className="border">Delete</button>
+                                            <button onClick={() => editId(tasks)} className="border p-1 rounded-md bg-black text-white ">EDIT</button>
+                                            <button onClick={() => deleteTask(tasks.id)} className="border  rounded-md bg-black text-white p-1">Delete</button>
                                                 </>
                                             )}
                                             
