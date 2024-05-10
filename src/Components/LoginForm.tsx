@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState ,useEffect} from "react";
 import axios from "axios";
 import  BASE_URL  from "../Constants/Links"
@@ -6,7 +7,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-const LoginForm = () => {
+interface LoginResponse{
+    token:string;
+    message:string;
+}
+
+const LoginForm :React.FC= () => {
     const navigate=useNavigate();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('')
@@ -16,13 +22,14 @@ const LoginForm = () => {
         if(token){
           navigate('/Dashboard');
         }
-      },[])
+      },[navigate])
 
-    const inputTyping = (event) => {
-        event.target.name == 'email' ? setEmail(event.target.value) : setPassword(event.target.value)
+    const inputTyping = (event:React.ChangeEvent<HTMLInputElement>) => {
+        const {name,value} =event.target;
+       name === 'email' ? setEmail(value) : setPassword(value);
     }
 
-    const submitFunction = async (event) => {
+    const submitFunction = async (event:React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const trimmedEmail=email.trim();
         const trimmedPassword=password.trim();
@@ -34,17 +41,17 @@ const LoginForm = () => {
             return toast.error("Password Length should be Min 4 Characters")
         }
         try {
-            const response=await axios.post(`${BASE_URL}/login`,{
+            const response=await axios.post<LoginResponse>(`${BASE_URL}/login`,{
              email,password
             })
-            const token=response.data.token
-            console.log(token); 
-             toast.success(response.data.message)
+            const{token,message}=response.data   
+            // console.log(token); 
+             toast.success(message)
              localStorage.setItem('token',token)
              navigate('/Dashboard')
-        } catch (error) {
+        } catch (error: any) {
+            toast.error(error.response?.data?.message || "An Error Occured")  //IT WILL SHOW THE MESSGE JSON OF ERROR THINGS
             console.error(error);
-            return toast.error(error.response.data.message)
         }
     }
 

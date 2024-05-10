@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import axios from "axios";
 import  BASE_URL  from "../Constants/Links"
@@ -7,16 +8,16 @@ import "react-toastify/dist/ReactToastify.css";
 
 
 
-const Signup = () => {
+const Signup:React.FC = () => {
     const navigate=useNavigate();
     const [email, setEmail] = useState<string>('');
     const [userName, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('')
 
-    const inputTyping = (event) => {
+    const inputTyping = (event:React.ChangeEvent<HTMLInputElement>) => {
         event.target.name == 'email' ? setEmail(event.target.value) :  event.target.name == 'userName'? setUsername(event.target.value) :setPassword(event.target.value)
     }
-    const submitFunction = async (event) => {
+    const submitFunction = async (event:React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const trimmedEmail=email.trim();
         const trimmedUserName=userName.trim();
@@ -40,9 +41,9 @@ const Signup = () => {
                 navigate('/')
              }, 3000);
            
-        } catch (error) {
+        } catch (error:any) {
             console.error(error);
-            return toast.error(error.response.data.message)
+            return toast.error(error.response?.data?.message || "An Error  Occured")
         }
     }
 

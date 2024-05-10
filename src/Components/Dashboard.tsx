@@ -1,23 +1,37 @@
-import { useEffect, useState, useRef } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
 import axios from "axios";
 import BASE_URL from "../Constants/Links"
-import { Link, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
+interface Task{
+    id?:string;
+    category_id:string;
+    title:string;
+    description:string;
+    due_date:string;
+    completed:string;
+}
+
+interface Category{
+    id:string;
+    name:string;
+}
 
 const Dashboard = () => {
-    const [tasks, setTasks] = useState([]); //SET TO STORE ALL TASKS
-    const [categories, setCategories] = useState([]);
-    const [userName, setUserName] = useState(""); //TO SHOW USER NAME ON THE TOP
-
-    const [newTitle, setnewTitle] = useState("")
-    const [newCat, setnewCat] = useState(1)
-    const [newDesc, setnewDesc] = useState("")
-    const [newDate, setnewDate] = useState("")
-    const [editTaskId, setEditTaskId] = useState("");
-    const [editedTask, setEditedTask] = useState({
+    const [tasks, setTasks] = useState<Task[]>([]); //SET TO STORE ALL TASKS
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [userName, setUserName] = useState<string>(""); //TO SHOW USER NAME ON THE TOP
+    const [newTitle, setnewTitle] = useState<string>("")
+    const [newCat, setnewCat] = useState<string>('1')
+    const [newDesc, setnewDesc] = useState<string>("")
+    const [newDate, setnewDate] = useState<string>("")
+    const [editTaskId, setEditTaskId] = useState<string>("");
+    const [editedTask, setEditedTask] = useState<Task>({
+        id:"",
         category_id: "",
         title: "",
         description: "",
@@ -39,7 +53,7 @@ const Dashboard = () => {
             setCategories(response.data.categories)
             console.log(response.data);
 
-        } catch (Error) {
+        } catch (Error:any) {
             if (Error.response.status === 401 || Error.response.status === 403) {
                 logout() //IF ANY ERROR MISMATCH IN TOKEN IT CLEAR AND USER SHOULD BE RELOGINED
             }
@@ -72,7 +86,7 @@ const Dashboard = () => {
         }
     }
 
-    const deleteTask = async (id) => {
+    const deleteTask = async (id:number) => {
         try {
             const response = await axios.post(`${BASE_URL}/deleteTask`, { id })
             toast.success(response.data.message)
@@ -85,8 +99,10 @@ const Dashboard = () => {
     }
 
 
-    const editId = (tasks) => {
-        setEditTaskId(tasks.id)
+    const editId = (tasks:Task) => {
+        if (tasks.id !== undefined) {
+            setEditTaskId(tasks.id);
+        }
         setEditedTask({
             category_id: tasks.category_id,
             title: tasks.title,
@@ -101,7 +117,7 @@ const Dashboard = () => {
         setEditTaskId("")
     }
 
-    const update=async (taskId)=>{
+    const update=async (taskId:number)=>{
      console.log(editedTask);
      if(!editedTask.category_id || !editedTask.title.trim() || !editedTask.description.trim() || !editedTask.due_date.trim() || !editedTask.completed ){
       return  toast.error("All field should be filled")
@@ -114,7 +130,13 @@ const Dashboard = () => {
         toast.error("failed to update")
      }
      finally{
-        setEditedTask("")
+        setEditedTask({
+            category_id: '',
+            title: '',
+            description: '',
+            due_date: '',
+            completed: ''
+          });
         setEditTaskId("")
         dashboardGet()
      }
@@ -170,7 +192,7 @@ const Dashboard = () => {
                                 </tr>
                             </thead>
                             <tbody className="text-center">
-                                {tasks.map((tasks, index) => (
+                                {tasks.map((tasks:any, index) => (
                                     <tr key={tasks.id}>
                                         <td >{index + 1}</td>
                                         <td>
@@ -180,7 +202,7 @@ const Dashboard = () => {
                                                         <option key={data.id} value={data.id}>{data.name}</option>
                                                     ))}
                                                 </select>
-                                            ) : tasks.category_id == 1 ? "Personal" : 'Official'}
+                                            ) : tasks.category_id == '1' ? "Personal" : 'Official'}
                                         </td>
                                         <td>
                                             {editTaskId == tasks.id ? (
