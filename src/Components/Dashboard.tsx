@@ -128,7 +128,7 @@ const Dashboard = () => {
                     <h1 className="text-2xl italic">Hi <span className="">{userName}</span> </h1>
                     <button className="border-2 p-1 border-black rounded-md bg-black text-white font-semibold" onClick={logout}>Logout</button>
                 </div>
-                <div className=" flex justify-around  flex-wrap border-black border py-6 mt-3 pb-11">
+                <div className=" flex justify-around  flex-wrap border-black border py-6 mt-3 pb-11 mx-3 pl-3 sm:pl-0">
                     <div className="mt-6">
                         <label className="mr-3" htmlFor="Category">Category</label>
                         <select className="border-black border" name="Category " id="Category" onChange={(e) => setnewCat(e.target.value)} defaultValue={1} >
@@ -143,7 +143,7 @@ const Dashboard = () => {
                     </div>
                     <div className="mt-6">
                         <label htmlFor="Description">Description</label>
-                        <input className="w-96" type="text" name="Description" id="Description" value={newDesc} onChange={(e) => setnewDesc(e.target.value)} />
+                        <input className=" sm:w-96 w-80" type="text" name="Description" id="Description" value={newDesc} onChange={(e) => setnewDesc(e.target.value)} />
                     </div>
                     <div className="mt-6">
                         <label htmlFor="Date">Due Date</label>
@@ -156,7 +156,8 @@ const Dashboard = () => {
                 <div>
                     <h1 className="text-center font-semibold text-2xl p-2 pt-6 pb-6">TASKS</h1>
                     <div className="flex justify-center">
-                        <table className="">
+                       <div className="overflow-x-auto sm:w-full px-4 mb-10">
+                       <table className="min-w-full  ">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -165,10 +166,10 @@ const Dashboard = () => {
                                     <th>Title</th>
                                     <th>Description</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    <th className="">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="text-center">
                                 {tasks.map((tasks, index) => (
                                     <tr key={tasks.id}>
                                         <td >{index + 1}</td>
@@ -205,10 +206,10 @@ const Dashboard = () => {
                                             </select>
                                         ) : (tasks.completed)}
                                             </td>
-                                        <td>
+                                        <td className="action">
                                             {editTaskId == tasks.id ? (
                                                 <>
-                                                 <button  onClick={cancelEdit} className="border rounded-md bg-black text-white p-1">Cancel</button>
+                                                <button  onClick={cancelEdit} className="border rounded-md bg-black text-white ">Cancel</button>
                                                 <button onClick={()=>update(tasks.id)} className="border rounded-md bg-black text-white p-1">Update</button>
                                                 </>           
                                             ) : (
@@ -223,6 +224,7 @@ const Dashboard = () => {
                                 ))}
                             </tbody>
                         </table>
+                       </div>
                     </div>
                 </div>
                 <ToastContainer />
