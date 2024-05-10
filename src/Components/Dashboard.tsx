@@ -77,11 +77,15 @@ const Dashboard = () => {
             })
             console.log(response);
             toast.success(response.data.message)
-
+            setnewDate("")
+            setnewDesc("")
+            setnewCat("")
+            setnewTitle("")
         } catch (error) {
             console.error(error);
         }
         finally {
+           
             dashboardGet();
         }
     }
